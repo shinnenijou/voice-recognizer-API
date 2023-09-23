@@ -15,13 +15,10 @@ from .text import WorkText
 class WorkFrame(ttk.Frame):
     
     def __init__(self, master, **kwargs):
-        voice_queue = kwargs.pop('voice_queue')
-        text_queue = kwargs.pop('text_queue')
-
         super().__init__(master, **kwargs)
 
         self.__thread_manager = ThreadManager()
-        self.add_threads(voice_queue, text_queue)
+        self.add_threads()
 
         self.__setting_frame = SettingFrame(self, text=STRING.LABEL_SETTING, padding=10)
         self.__setting_frame.pack(fill=X, expand=YES, anchor=N, side=TOP)
@@ -75,11 +72,13 @@ class WorkFrame(ttk.Frame):
         return result
 
     # WIDGETS
-    def add_threads(self, voice_queue, text_queue):
+    def add_threads(self):
         if is_gui_only():
             return
 
         record_queue = t_Queue(maxsize=0)
+        voice_queue = t_Queue(maxsize=0)
+        text_queue = t_Queue(maxsize=0)
 
         from res.scripts.stream import MicrophoneRecorder
         self.__thread_manager.add(
@@ -101,6 +100,14 @@ class WorkFrame(ttk.Frame):
             WebhookSender,
             "Sender",
             src_queue=text_queue
+        )
+
+        from res.scripts.recognize import WhisperRecognizer
+        self.__thread_manager.add(
+            WhisperRecognizer,
+            "Recognizer",
+            src_queue=voice_queue,
+            dst_queue=text_queue,
         )
 
     def add_options(self):

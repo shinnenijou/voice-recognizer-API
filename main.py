@@ -1,22 +1,18 @@
 import sys
 import os
-from multiprocessing import Queue as p_Queue, Process, Event as p_Event
 from threading import Thread, Event as t_Event
 from queue import Queue as t_Queue
 
 import myPath
 from res.scripts.loading import check_update
-from res.scripts.utils import FileLikeQueue, mkdir, remove,logger
-from res.scripts.config import is_gui_only, ThreadCommand, config, STRING
+from res.scripts.utils import FileLikeQueue, mkdir, remove, logger
+from res.scripts.config import ThreadCommand, config, STRING
 
 
 # GLOBAL
 p_recognizer = None
 output = FileLikeQueue()
-voice_queue = p_Queue(maxsize=0)
-text_queue = p_Queue(maxsize=0)
 loading_screen = None
-
 
 def loading(is_complete: t_Event, is_reboot: t_Event, queue: t_Queue):
     global p_recognizer
@@ -29,24 +25,6 @@ def loading(is_complete: t_Event, is_reboot: t_Event, queue: t_Queue):
             is_reboot.set()
     except Exception as e:
         logger.log_error(f"[check_update]now version: {config.get_value(STRING.CONFIG_VERSION)}, update failed: " + str(e))
-
-    # Init processes
-    if not is_gui_only():
-        from res.scripts.recognize import WhisperRecognizer
-        running_flag = p_Event()
-
-        recognizer = WhisperRecognizer(
-            src_queue=voice_queue,
-            dst_queue=text_queue,
-            api_key=config.get_value(STRING.CONFIG_APIKEY),
-            proxy=config.get_value(STRING.CONFIG_PROXY)
-        )
-        p_recognizer = Process(target=recognizer.run, args=(running_flag, output, ), name='Whisper')
-
-        # Start
-        p_recognizer.start()
-        if not running_flag.wait(timeout=60):
-            is_reboot.is_set()
 
     is_complete.set()
 
@@ -83,23 +61,17 @@ def main():
 
     # Reboot after updating
     if reboot_flag.is_set():
-        if not is_gui_only():
-            p_recognizer.terminate()
-
         exit(ThreadCommand.RebootExitCode)
 
     # Main GUI Process, Threads will be managed in Main Process
     from res.scripts.gui import MainWindow
-    win = MainWindow(themename='yeti', voice_queue=voice_queue, text_queue=text_queue)
+    win = MainWindow(themename='yeti')
 
     # start main window
     win.init_style()
     win.run()
 
     # Exit
-    if not is_gui_only():
-        p_recognizer.terminate()
-
     remove(myPath.TEMP_PATH)
     sys.stdout = save_stdout
     sys.stderr = save_stderr

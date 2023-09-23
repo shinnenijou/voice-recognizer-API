@@ -13,9 +13,6 @@ from .window import *
 
 class MainWindow(ttk.Window):
     def __init__(self, **kwargs):
-        voice_queue = kwargs.pop('voice_queue')
-        text_queue = kwargs.pop('text_queue')
-
         super().__init__(**kwargs)
 
         screen_width = self.winfo_screenwidth()
@@ -29,7 +26,7 @@ class MainWindow(ttk.Window):
         self.resizable(False, False)
 
         # Main work frame
-        self.work_frame = WorkFrame(self, voice_queue=voice_queue, text_queue=text_queue, padding=15)
+        self.work_frame = WorkFrame(self, padding=15)
         self.work_frame.pack(expand=True, fill=BOTH)
 
         # Menu
