@@ -5,7 +5,7 @@ import requests
 from res.scripts.config import config
 from res.scripts.config.const import STRING, CONST
 
-FETCH_KEY_URL = "http://marou-miriya.space/api/vtuber/openai_key"
+FETCH_KEY_URL = "https://marou-miriya.space/api/vtuber/openai_key"
 
 
 class WhisperRecognizer(Thread):
