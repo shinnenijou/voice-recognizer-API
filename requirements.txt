@@ -1,0 +1,9 @@
+pyaudio
+requests
+soundfile
+ttkbootstrap
+tkinter-tooltip
+torch
+torchvision
+torchaudio
+openai
