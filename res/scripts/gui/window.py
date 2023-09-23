@@ -68,34 +68,6 @@ def pop_setting_window(master):
 
     proxy_entry_var.trace_add('write', lambda a, b, c: proxy_label_var.set(STRING.LABEL_PROXY+STRING.LABEL_MODIFY_MARK))
 
-    # MODEL
-    model_frame = ttk.Frame(setting_frame)
-    model_frame.pack(side=TOP, fill=X, expand=YES, pady=(2.5, 2.5))
-    model_label_var = ttk.StringVar(model_frame, value=STRING.LABEL_MODEL)
-    model_menu_var = ttk.StringVar(model_frame, name=STRING.CONFIG_MODEL, value=config.get_value(STRING.CONFIG_MODEL))
-    model_menu_var.trace_add('write', lambda a, b, c: model_label_var.set(STRING.LABEL_MODEL+STRING.LABEL_MODIFY_MARK))
-    ttk.Label(model_frame, textvariable=model_label_var, width=15).pack(side=LEFT, padx=(15, 0))
-    model_button = ttk.Menubutton(model_frame, style='primary.Outline.TMenubutton', textvariable=model_menu_var)
-    model_menu = ttk.Menu(model_button)
-    for option in os.listdir(myPath.MODEL_PATH):
-        model_menu.add_radiobutton(label=option, value=option, variable=model_menu_var)
-    model_button.configure(menu=model_menu)
-    model_button.pack(side=LEFT, fill=X, expand=YES, padx=5)
-
-    # DEVICE
-    device_frame = ttk.Frame(setting_frame)
-    device_frame.pack(side=TOP, fill=X, expand=YES, pady=(2.5, 2.5))
-    device_label_var = ttk.StringVar(device_frame, value=STRING.LABEL_DEVICE)
-    device_menu_var = ttk.StringVar(device_frame, name=STRING.CONFIG_DEVICE, value=config.get_value(STRING.CONFIG_DEVICE))
-    device_menu_var.trace_add('write', lambda a, b, c: device_label_var.set(STRING.LABEL_DEVICE+STRING.LABEL_MODIFY_MARK))
-    ttk.Label(device_frame, textvariable=device_label_var, width=15).pack(side=LEFT, padx=(15, 0))
-    device_button = ttk.Menubutton(device_frame, style='primary.Outline.TMenubutton', textvariable=device_menu_var)
-    device_menu = ttk.Menu(device_button)
-    for option in CONST.DEVICE_LIST:
-        device_menu.add_radiobutton(label=option, value=option, variable=device_menu_var)
-    device_button.configure(menu=device_menu)
-    device_button.pack(side=LEFT, fill=X, expand=YES, padx=5)
-
     # DETECT THRESHOLD
     threshold_frame = ttk.Frame(setting_frame)
     threshold_frame.pack(side=TOP, fill=X, expand=YES, pady=(5, 2.5))
@@ -121,15 +93,11 @@ def pop_setting_window(master):
     # setting dict
     settings = {
         STRING.CONFIG_PROXY: proxy_entry_var,
-        STRING.CONFIG_MODEL: model_menu_var,
-        STRING.CONFIG_DEVICE: device_menu_var,
         STRING.CONFIG_DETECT_THRESHOLD: threshold_entry_var,
         STRING.CONFIG_TIMEOUT: timeout_entry_var,
     }
     labels = {
         STRING.CONFIG_PROXY: proxy_label_var,
-        STRING.CONFIG_MODEL: model_label_var,
-        STRING.CONFIG_DEVICE: device_label_var,
         STRING.CONFIG_DETECT_THRESHOLD: threshold_label_var,
         STRING.CONFIG_TIMEOUT: timeout_label_var,
     }

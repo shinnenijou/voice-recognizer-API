@@ -69,7 +69,7 @@ class STRING:
     BUTTON_STOP = '停止'
 
     # TITLE TEXT
-    TITLE_MAIN = 'フェンリルちゃん'
+    TITLE_MAIN = 'フェンリルちゃん API ver'
     TITLE_ABOUT = f'{TITLE_MAIN}について...'
     TITLE_SETTING = '詳細設定'
 
