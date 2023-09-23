@@ -9,7 +9,7 @@ from queue import Queue as t_Queue
 import myPath
 from res.scripts.config import config, ThreadCommand, STRING
 
-REPO_URL = "https://raw.githubusercontent.com/shinnenijou/voice-recognizer/main/"
+REPO_URL = "https://raw.githubusercontent.com/shinnenijou/voice-recognizer-API/main/"
 
 PROXIES = None
 if config.get_value(STRING.CONFIG_PROXY):
