@@ -4,11 +4,15 @@ from multiprocessing import Event
 import openai
 from res.scripts.config.const import STRING
 
+
 class WhisperRecognizer:
     def __init__(self, **kwargs):
         self.__key = kwargs.get("api_key")
         self.__src_queue = kwargs.get('src_queue')
         self.__dst_queue = kwargs.get('dst_queue')
+        if kwargs.get('proxy', ''):
+            os.putenv('http_proxy', kwargs.get('proxy'))
+            os.putenv('https_proxy', kwargs.get('proxy'))
 
     def init(self):
         openai.api_key = self.__key

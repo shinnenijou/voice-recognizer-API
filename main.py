@@ -1,4 +1,5 @@
 import sys
+import os
 from multiprocessing import Queue as p_Queue, Process, Event as p_Event
 from threading import Thread, Event as t_Event
 from queue import Queue as t_Queue
@@ -37,7 +38,8 @@ def loading(is_complete: t_Event, is_reboot: t_Event, queue: t_Queue):
         recognizer = WhisperRecognizer(
             src_queue=voice_queue,
             dst_queue=text_queue,
-            api_key=config.get_value(STRING.CONFIG_APIKEY)
+            api_key=config.get_value(STRING.CONFIG_APIKEY),
+            proxy=config.get_value(STRING.CONFIG_PROXY)
         )
         p_recognizer = Process(target=recognizer.run, args=(running_flag, output, ), name='Whisper')
 
@@ -61,6 +63,11 @@ def main():
     sys.stdout = output
     sys.stderr = output
     mkdir(myPath.TEMP_PATH)
+
+    # SET PROXY
+    if config.get_value(STRING.CONFIG_PROXY):
+        os.putenv('http_proxy', config.get_value(STRING.CONFIG_PROXY))
+        os.putenv('https_proxy', config.get_value(STRING.CONFIG_PROXY))
 
     # start loading screen
     from res.scripts.loading import LoadingScreen
