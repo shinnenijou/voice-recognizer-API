@@ -8,14 +8,13 @@ IGNORE_FILES = [
     '.gitignore',
     'make_version.py',
     'README.md',
-    'requirements.txt',
     'version.json',
     'starter.py'
 ]
 
 # 更新工作流: 在主分支需要更新的版本打上tag以后更新到这里, 生成version.json后提交即可
-LATEST_TAG = '0.2.16'
-UPDATE_ALL = False
+LATEST_TAG = '0.1.0'
+UPDATE_ALL = True
 
 
 def parse_version(string: str):
@@ -143,7 +142,7 @@ def main():
             temp = {}
             for (version, version_info) in versions:
                 temp[encode_version(version)] = version_info
-            file.write(json.dumps(temp))
+            file.write(json.dumps(temp, indent=4))
 
     subprocess.run(f'git checkout {cur_branch}', shell=True, stdout=subprocess.PIPE)
 

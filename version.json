@@ -1,3 +1,45 @@
 {
-
+    "0.1.0": {
+        "version": "0.1.0",
+        "update_files": {
+            "main.py": "A",
+            "myPath.py": "A",
+            "requirements.txt": "A",
+            "res/audio/kamome.wav": "A",
+            "res/img/icon.ico": "A",
+            "res/img/loading.gif": "A",
+            "res/img/logo.png": "A",
+            "res/scripts/__init__.py": "A",
+            "res/scripts/config/__init__.py": "A",
+            "res/scripts/config/config.py": "A",
+            "res/scripts/config/const.py": "A",
+            "res/scripts/config/error.py": "A",
+            "res/scripts/gui/__init__.py": "A",
+            "res/scripts/gui/button.py": "A",
+            "res/scripts/gui/frame.py": "A",
+            "res/scripts/gui/style.py": "A",
+            "res/scripts/gui/text.py": "A",
+            "res/scripts/gui/window.py": "A",
+            "res/scripts/loading/__init__.py": "A",
+            "res/scripts/loading/checkUpdate.py": "A",
+            "res/scripts/loading/loadingScreen.py": "A",
+            "res/scripts/managers/__init__.py": "A",
+            "res/scripts/managers/thread_manager.py": "A",
+            "res/scripts/recognize/__init__.py": "A",
+            "res/scripts/stream/__init__.py": "A",
+            "res/scripts/stream/predictor.py": "A",
+            "res/scripts/stream/recorder.py": "A",
+            "res/scripts/stream/silero-vad/CODE_OF_CONDUCT.md": "A",
+            "res/scripts/stream/silero-vad/LICENSE": "A",
+            "res/scripts/stream/silero-vad/__init__.py": "A",
+            "res/scripts/stream/silero-vad/files/silero_logo.jpg": "A",
+            "res/scripts/stream/silero-vad/files/silero_vad.jit": "A",
+            "res/scripts/stream/silero-vad/files/silero_vad.onnx": "A",
+            "res/scripts/stream/silero-vad/hubconf.py": "A",
+            "res/scripts/stream/silero-vad/silero-vad.ipynb": "A",
+            "res/scripts/stream/silero-vad/utils_vad.py": "A",
+            "res/scripts/utils/__init__.py": "A",
+            "res/scripts/webhook/__init__.py": "A"
+        }
+    }
 }
