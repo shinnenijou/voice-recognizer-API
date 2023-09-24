@@ -1,5 +1,6 @@
 from configparser import RawConfigParser
 
+import myPath
 from .. import utils
 from .const import STRING
 
@@ -10,7 +11,7 @@ REQUIRE_FIELDS = {
     STRING.CONFIG_LANGUAGE: 'ja',
     STRING.CONFIG_MODEL: "large-v2",
     STRING.CONFIG_DEVICE: 'auto',
-    STRING.CONFIG_VERSION: '0.0.0',
+    STRING.CONFIG_VERSION: '0.2.2',
     STRING.CONFIG_PROXY: '',
     STRING.CONFIG_TIMEOUT: 3,
     STRING.CONFIG_APIKEY: '',
@@ -20,6 +21,7 @@ REQUIRE_FIELDS = {
 class Config(RawConfigParser):
     def __init__(self, config_file, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        utils.mkdir(myPath.DATA_DIR)
         utils.touch(config_file, '[global]')
         self.read(config_file, encoding='UTF-8')
         self.__section = self.sections()[0]

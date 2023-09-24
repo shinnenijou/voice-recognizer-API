@@ -1,4 +1,5 @@
 import sys
+sys.dont_write_bytecode = True
 import os
 from threading import Thread, Event as t_Event
 from queue import Queue as t_Queue
@@ -40,9 +41,9 @@ def main():
     save_stderr = sys.stderr
     sys.stdout = output
     sys.stderr = output
+    mkdir(myPath.DATA_DIR)
     mkdir(myPath.TEMP_PATH)
 
-    # SET PROXY
     if config.get_value(STRING.CONFIG_PROXY):
         os.putenv('http_proxy', config.get_value(STRING.CONFIG_PROXY))
         os.putenv('https_proxy', config.get_value(STRING.CONFIG_PROXY))

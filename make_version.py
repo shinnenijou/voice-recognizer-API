@@ -114,12 +114,12 @@ def main():
     cur_branch = get_current_branch()
     subprocess.run('git checkout main', shell=True, stdout=subprocess.PIPE)
 
-    if not os.path.exists(os.path.abspath(os.path.join(myPath.ROOT_PATH, 'version.json'))):
-        with open(os.path.abspath(os.path.join(myPath.ROOT_PATH, 'version.json')), 'w') as file:
+    if not os.path.exists(os.path.abspath(os.path.join(myPath.WORK_DIR, 'version.json'))):
+        with open(os.path.abspath(os.path.join(myPath.WORK_DIR, 'version.json')), 'w') as file:
             file.write('{}')
 
     versions = []
-    with open(os.path.abspath(os.path.join(myPath.ROOT_PATH, 'version.json')), 'r') as file:
+    with open(os.path.abspath(os.path.join(myPath.WORK_DIR, 'version.json')), 'r') as file:
         temp = json.loads(file.read())
         for version_str, version_info in temp.items():
             versions.append((parse_version(version_str), version_info))
@@ -138,7 +138,7 @@ def main():
 
     if len(files_diff):
         versions.append((parse_version(LATEST_TAG), {'version': LATEST_TAG, 'update_files': files_diff}))
-        with open(os.path.abspath(os.path.join(myPath.ROOT_PATH, 'version.json')), 'w') as file:
+        with open(os.path.abspath(os.path.join(myPath.WORK_DIR, 'version.json')), 'w') as file:
             temp = {}
             for (version, version_info) in versions:
                 temp[encode_version(version)] = version_info

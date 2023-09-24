@@ -1,19 +1,20 @@
+import os
 from os.path import join, dirname
 
 # DIR
-ROOT_PATH = dirname(__file__)
-LOG_PATH = join(ROOT_PATH, 'logs')
-RES_PATH = join(ROOT_PATH, 'res')
-ENV_PATH = join(ROOT_PATH, 'env')
-TEMP_PATH = join(ROOT_PATH, '.temp')
+__APPDATA__ = os.getenv('APPDATA')
+DATA_DIR = os.path.join(__APPDATA__, 'FenrirChan')
+LOG_PATH = join(DATA_DIR, 'logs')
+TEMP_PATH = join(DATA_DIR, 'temp')
+CONFIG_FILE = join(DATA_DIR, 'config.ini')
+
+WORK_DIR = dirname(__file__)
+RES_PATH = join(WORK_DIR, 'res')
+ENV_PATH = join(WORK_DIR, 'env')
 PYTHON_PATH = join(ENV_PATH, 'python.exe')
-MODEL_PATH = join(RES_PATH, 'model')
 SCRIPTS_PATH = join(RES_PATH, 'scripts')
 IMG_RES_PATH = join(RES_PATH, 'img')
 AUDIO_RES_PATH = join(RES_PATH, 'audio')
-
-# FILE
-CONFIG_FILE = join(ROOT_PATH, 'config.ini')
 
 # AUDIO
 LOADING_WAV = join(AUDIO_RES_PATH, 'kamome.wav')

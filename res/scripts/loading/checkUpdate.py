@@ -101,7 +101,7 @@ def update_files(files: dict, queue: t_Queue):
 
     if complete_flag:
         for remote_file, op in dst_map.items():
-            dst = os.path.abspath(os.path.join(myPath.ROOT_PATH, remote_file))
+            dst = os.path.abspath(os.path.join(myPath.WORK_DIR, remote_file))
 
             if op[0] == 'A' or op[0] == 'M':
                 if not os.path.exists(dst):
