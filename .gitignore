@@ -152,3 +152,7 @@ cython_debug/
 .idea/
 config.ini
 others
+starter
+env
+build
+fenrir_chan_API_ver.exe

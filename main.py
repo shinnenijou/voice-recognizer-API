@@ -1,5 +1,4 @@
 import sys
-sys.dont_write_bytecode = True
 import os
 from threading import Thread, Event as t_Event
 from queue import Queue as t_Queue
