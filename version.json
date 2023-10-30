@@ -1,3 +1,10 @@
 {
-
+    "0.2.3": {
+        "version": "0.2.3",
+        "update_files": {
+            "main.py": "M",
+            "res/img/reload.gif": "A",
+            "res/scripts/recognize/__init__.py": "M"
+        }
+    }
 }

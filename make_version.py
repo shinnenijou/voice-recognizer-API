@@ -9,12 +9,16 @@ IGNORE_FILES = [
     'make_version.py',
     'README.md',
     'version.json',
-    'starter.py'
+    'starter.py',
+    'compile.bat',
+    'starter.py',
+    'make-wizard.nsi',
+    'icon.ico'
 ]
 
 # 更新工作流: 在主分支需要更新的版本打上tag以后更新到这里, 生成version.json后提交即可
-LATEST_TAG = '0.1.0'
-UPDATE_ALL = True
+LATEST_TAG = '0.2.3'
+UPDATE_ALL = False
 
 
 def parse_version(string: str):
