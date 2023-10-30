@@ -17,7 +17,7 @@ IGNORE_FILES = [
 ]
 
 # 更新工作流: 在主分支需要更新的版本打上tag以后更新到这里, 生成version.json后提交即可
-LATEST_TAG = '0.2.3'
+LATEST_TAG = '0.2.4'
 UPDATE_ALL = False
 
 

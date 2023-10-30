@@ -6,5 +6,16 @@
             "res/img/reload.gif": "A",
             "res/scripts/recognize/__init__.py": "M"
         }
+    },
+    "0.2.4": {
+        "version": "0.2.4",
+        "update_files": {
+            "res/scripts/config/config.py": "M",
+            "res/scripts/config/const.py": "M",
+            "res/scripts/gui/button.py": "M",
+            "res/scripts/gui/frame.py": "M",
+            "res/scripts/gui/text.py": "M",
+            "res/scripts/recognize/__init__.py": "M"
+        }
     }
 }
