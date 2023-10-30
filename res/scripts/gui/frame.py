@@ -33,6 +33,8 @@ class WorkFrame(ttk.Frame):
         self.__start_button = self.create_start_button()
         self.__start_button.pack()
 
+        self.reload_webhook = None
+
     # PROPERTIES
     @property
     def thread_manager(self):
@@ -53,7 +55,12 @@ class WorkFrame(ttk.Frame):
         try:
             # 保存配置
             self.__text.clear_text()
+
             self.__setting_frame.save_setting()
+
+            # 如果有输入名字但没有手动获取URL则在启动时主动更新一次
+            if not config.get_value(STRING.CONFIG_WEBHOOK) and callable(self.reload_webhook):
+                self.reload_webhook()
 
             result = self.__thread_manager.start()
             if result:
@@ -124,11 +131,9 @@ class WorkFrame(ttk.Frame):
         url_frame = ttk.Frame(self.__setting_frame)
         url_frame.pack(fill=X, expand=YES, pady=(0, 2.5))
         ttk.Label(url_frame, text=STRING.LABEL_WEBHOOK, width=15).pack(side=LEFT, padx=(15, 0))
-        url_combobox = JsonCombox(url_frame, name=STRING.CONFIG_WEBHOOK, state=READONLY, )
+        url_combobox = JsonCombox(url_frame, name=STRING.CONFIG_WEBHOOK, state=READONLY)
         url_combobox.pack(side=LEFT, fill=X, expand=YES, padx=5)
-        self.__setting_frame.reload_webhook(name_entry, url_combobox)
-        reload_button = ttk.Button(url_frame, text=STRING.BUTTON_FETCH, takefocus=False,
-                                   command=lambda: self.__setting_frame.reload_webhook(name_entry, url_combobox))
+        reload_button = ttk.Button(url_frame, text=STRING.BUTTON_FETCH, takefocus=False)
         reload_button.pack(side=RIGHT, padx=(0, 15))
 
         language_frame = ttk.Frame(self.__setting_frame)
@@ -140,6 +145,15 @@ class WorkFrame(ttk.Frame):
             button.pack(side=LEFT, padx=(0, 15))
             if language == config.get_value(STRING.CONFIG_LANGUAGE):
                 button.invoke()
+
+        # 注册需要的闭包
+        def reload_webhook():
+            url_combobox.data = config.request_config(STRING.CONFIG_WEBHOOK, name=name_entry.get())
+            url_combobox.refresh()
+
+        self.reload_webhook = reload_webhook
+        self.reload_webhook()
+        reload_button.config(command=self.reload_webhook)
 
     def create_start_button(self):
         return TransButton(
@@ -190,8 +204,3 @@ class SettingFrame(ttk.Labelframe):
         config.set_value(STRING.CONFIG_LANGUAGE, self.language_var.get())
 
         config.save()
-
-    @staticmethod
-    def reload_webhook(name_entry: ttk.Entry, combox: JsonCombox):
-        combox.data = config.request_config(STRING.CONFIG_WEBHOOK, name=name_entry.get())
-        combox.refresh()
