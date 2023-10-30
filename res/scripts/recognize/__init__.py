@@ -5,9 +5,6 @@ import requests
 from res.scripts.config import config
 from res.scripts.config.const import STRING, CONST
 
-FETCH_KEY_URL = "https:/api.shinnen.site/vtuber/openai_key"
-
-
 class WhisperRecognizer(Thread):
     def __init__(self, _running_flag: Event, **kwargs):
         super().__init__()
@@ -27,10 +24,10 @@ class WhisperRecognizer(Thread):
 
     def fetch_key(self, name: str):
         try:
-            resp = requests.get(FETCH_KEY_URL, params={"name": name})
+            resp = requests.get(f"{STRING.BASE_API_URL}/openai_key" , params={"name": name})
             data = resp.json()
             if data.get('code', -2) == 0:
-                return data.get('key', '')
+                return data.get('data', '')
             else:
                 print("[error]" + data.get('message', 'Unknown error'))
                 return ''

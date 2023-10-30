@@ -1,19 +1,21 @@
 import tkinter as tk
+import os
 from queue import Queue as t_Queue
 
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
+import myPath
 from res.scripts.config import CONST, is_gui_only, config, STRING
 from res.scripts.managers import ThreadManager
 from res.scripts.utils import logger
 
-from .button import TransButton
-from .text import WorkText
+from .button import TransButton, AnimationButton
+from .text import WorkText, JsonCombox
 
 
 class WorkFrame(ttk.Frame):
-    
+
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
@@ -24,7 +26,8 @@ class WorkFrame(ttk.Frame):
         self.__setting_frame.pack(fill=X, expand=YES, anchor=N, side=TOP)
         self.add_options()
 
-        self.__text = WorkText(self, state=NORMAL, cursor='arrow', autohide=True, height=8, takefocus=NO, bootstyle='round', font=CONST.GLOBAL_FONT)
+        self.__text = WorkText(self, state=NORMAL, cursor='arrow', autohide=True, height=8, takefocus=NO,
+                               bootstyle='round', font=CONST.GLOBAL_FONT)
         self.__text.pack(fill=BOTH, expand=YES, pady=10, side=TOP, anchor=N)
 
         self.__start_button = self.create_start_button()
@@ -111,25 +114,30 @@ class WorkFrame(ttk.Frame):
         )
 
     def add_options(self):
-        url_frame = ttk.Frame(self.__setting_frame)
-        url_frame.pack(fill=X, expand=YES, pady=(0, 2.5))
-        ttk.Label(url_frame, text=STRING.LABEL_WEBHOOK, width=15).pack(side=LEFT, padx=(15, 0))
-        entry = ttk.Entry(url_frame, name=STRING.CONFIG_WEBHOOK)
-        entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
-        entry.insert(0, config.get_value(STRING.CONFIG_WEBHOOK))
-
         name_frame = ttk.Frame(self.__setting_frame)
         name_frame.pack(fill=X, expand=YES, pady=(2.5, 2.5))
         ttk.Label(name_frame, text=STRING.LABEL_NAME, width=15).pack(side=LEFT, padx=(15, 0))
-        entry = ttk.Entry(name_frame, name=STRING.CONFIG_NAME)
-        entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
-        entry.insert(0, config.get_value(STRING.CONFIG_NAME))
+        name_entry = ttk.Entry(name_frame, name=STRING.CONFIG_NAME)
+        name_entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
+        name_entry.insert(0, config.get_value(STRING.CONFIG_NAME))
+
+        url_frame = ttk.Frame(self.__setting_frame)
+        url_frame.pack(fill=X, expand=YES, pady=(0, 2.5))
+        ttk.Label(url_frame, text=STRING.LABEL_WEBHOOK, width=15).pack(side=LEFT, padx=(15, 0))
+        url_combobox = JsonCombox(url_frame, name=STRING.CONFIG_WEBHOOK_INDEX)
+        url_combobox.pack(side=LEFT, fill=X, expand=YES, padx=5)
+        self.__setting_frame.reload_webhook(name_entry, url_combobox)
+        reload_button = AnimationButton(url_frame, res=os.path.join(myPath.IMG_RES_PATH, 'reload.gif'),
+                                        command=lambda: self.__setting_frame.reload_webhook(name_entry, url_combobox),
+                                        takefocus=False)
+        reload_button.pack(side=RIGHT, padx=(0, 15))
 
         language_frame = ttk.Frame(self.__setting_frame)
         language_frame.pack(fill=X, expand=YES, pady=(10, 0))
         ttk.Label(language_frame, text=STRING.LABEL_LANGUAGE, width=15).pack(side=LEFT, padx=(15, 15))
         for text, language in STRING.LANGUAGE_MAP.items():
-            button = ttk.Radiobutton(language_frame, text=text, value=language, variable=self.__setting_frame.language_var)
+            button = ttk.Radiobutton(language_frame, text=text, value=language,
+                                     variable=self.__setting_frame.language_var)
             button.pack(side=LEFT, padx=(0, 15))
             if language == config.get_value(STRING.CONFIG_LANGUAGE):
                 button.invoke()
@@ -183,3 +191,9 @@ class SettingFrame(ttk.Labelframe):
         config.set_value(STRING.CONFIG_LANGUAGE, self.language_var.get())
 
         config.save()
+
+    @staticmethod
+    def reload_webhook(name_entry: ttk.Entry, combox: JsonCombox):
+        config.request_config(STRING.CONFIG_WEBHOOK, name=name_entry.get())
+        combox.data = config.get_value(STRING.CONFIG_WEBHOOK)
+        combox.refresh(config.get_int(STRING.CONFIG_WEBHOOK_INDEX, 0))

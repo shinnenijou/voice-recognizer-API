@@ -1,4 +1,7 @@
 from configparser import RawConfigParser
+import json
+
+import requests
 
 import myPath
 from .. import utils
@@ -54,3 +57,24 @@ class Config(RawConfigParser):
     def save(self):
         with open(self.__config_file, 'w', encoding='UTF-8') as f:
             self.write(f)
+
+    def request_config(self, config_field: str, *args, **kwargs):
+        if config_field == STRING.CONFIG_WEBHOOK:
+            return self.__request_webhook(*args, **kwargs)
+
+    def __request_webhook(self, *args, **kwargs):
+        name = kwargs.get('name', '')
+
+        try:
+            resp = requests.get(
+                url=f"{STRING.BASE_API_URL}/discord_webhook",
+                params={"name": name}
+            )
+
+            if resp.status_code == 200:
+                self.set_value(STRING.CONFIG_WEBHOOK, json.dumps(resp.json().get('data', {})))
+                self.save()
+
+        except Exception as e:
+            print(f"[request_webhook]failed to request webhook_url: {str(e)}")
+            pass
