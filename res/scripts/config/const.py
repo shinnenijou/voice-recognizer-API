@@ -67,6 +67,7 @@ class STRING:
     # BUTTON TEXT
     BUTTON_START = '起動'
     BUTTON_STOP = '停止'
+    BUTTON_FETCH = '更新'
 
     # TITLE TEXT
     TITLE_MAIN = 'フェンリルちゃん API ver'
