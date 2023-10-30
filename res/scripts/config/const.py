@@ -84,7 +84,6 @@ class STRING:
     CONFIG_DEVICE = 'device'
     CONFIG_NAME = 'show_name'
     CONFIG_WEBHOOK = 'webhook_url'
-    CONFIG_WEBHOOK_INDEX = 'webhook_url_index'
     CONFIG_DETECT_THRESHOLD = 'detect_threshold'
     CONFIG_AVERAGE_WINDOW = 'moving_average_window'
     CONFIG_UPDATE_INTERVAL = 'update_interval'

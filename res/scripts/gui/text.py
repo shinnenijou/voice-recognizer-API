@@ -37,6 +37,7 @@ class WorkText(ScrolledText):
 
 
 class JsonCombox(ttk.Combobox):
+    SEP = ':'
 
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
@@ -48,12 +49,11 @@ class JsonCombox(ttk.Combobox):
         return json.dumps(self.__data)
 
     @data.setter
-    def data(self, value: str):
-        try:
-            data = json.loads(value)
-            self.__data = data
-        except json.JSONDecodeError as e:
-            pass
+    def data(self, value):
+        if not isinstance(value, dict):
+            return
+
+        self.__data = value
 
     def get_data(self, index: int):
         i = 0
@@ -63,14 +63,20 @@ class JsonCombox(ttk.Combobox):
 
             i += 1
 
-    def refresh(self, index: int = 0):
+    def refresh(self):
         self.set('')
-        options = []
+        url = config.get_value(STRING.CONFIG_WEBHOOK, '')
+        index = -1
 
-        i = 1
+        options = []
+        i = 0
         for key, value in self.__data.items():
-            string = f"【{i}】 {key} {value}"
+            string = f"{key}{self.SEP} {value}"
             options.append(string)
+
+            if value == url.strip():
+                index = i
+
             i += 1
 
         self.config(values=options)
@@ -78,14 +84,16 @@ class JsonCombox(ttk.Combobox):
         if len(options) == 0:
             return
 
-        if index >= len(options):
-            index = len(options) - 1
+        if index == -1:
+            index = 0
 
         self.current(index)
 
     def get(self):
         text = super().get()
-        if len(text) > 2:
-            return int(text[1]) - 1
+        index = text.find(self.SEP)
 
-        return 0
+        if index != 1:
+            return text[index+1:].strip()
+
+        return ''

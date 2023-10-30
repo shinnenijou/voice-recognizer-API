@@ -124,7 +124,7 @@ class WorkFrame(ttk.Frame):
         url_frame = ttk.Frame(self.__setting_frame)
         url_frame.pack(fill=X, expand=YES, pady=(0, 2.5))
         ttk.Label(url_frame, text=STRING.LABEL_WEBHOOK, width=15).pack(side=LEFT, padx=(15, 0))
-        url_combobox = JsonCombox(url_frame, name=STRING.CONFIG_WEBHOOK_INDEX)
+        url_combobox = JsonCombox(url_frame, name=STRING.CONFIG_WEBHOOK)
         url_combobox.pack(side=LEFT, fill=X, expand=YES, padx=5)
         self.__setting_frame.reload_webhook(name_entry, url_combobox)
         reload_button = AnimationButton(url_frame, res=os.path.join(myPath.IMG_RES_PATH, 'reload.gif'),
@@ -194,6 +194,5 @@ class SettingFrame(ttk.Labelframe):
 
     @staticmethod
     def reload_webhook(name_entry: ttk.Entry, combox: JsonCombox):
-        config.request_config(STRING.CONFIG_WEBHOOK, name=name_entry.get())
-        combox.data = config.get_value(STRING.CONFIG_WEBHOOK)
-        combox.refresh(config.get_int(STRING.CONFIG_WEBHOOK_INDEX, 0))
+        combox.data = config.request_config(STRING.CONFIG_WEBHOOK, name=name_entry.get())
+        combox.refresh()

@@ -62,8 +62,10 @@ class Config(RawConfigParser):
         if config_field == STRING.CONFIG_WEBHOOK:
             return self.__request_webhook(*args, **kwargs)
 
-    def __request_webhook(self, *args, **kwargs):
+    @staticmethod
+    def __request_webhook(*args, **kwargs):
         name = kwargs.get('name', '')
+        data = {}
 
         try:
             resp = requests.get(
@@ -72,9 +74,10 @@ class Config(RawConfigParser):
             )
 
             if resp.status_code == 200:
-                self.set_value(STRING.CONFIG_WEBHOOK, json.dumps(resp.json().get('data', {})))
-                self.save()
+                data = resp.json().get('data', {})
 
         except Exception as e:
             print(f"[request_webhook]failed to request webhook_url: {str(e)}")
             pass
+
+        return data
