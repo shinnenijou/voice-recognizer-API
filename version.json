@@ -17,5 +17,11 @@
             "res/scripts/gui/text.py": "M",
             "res/scripts/recognize/__init__.py": "M"
         }
+    },
+    "0.2.5": {
+        "version": "0.2.5",
+        "update_files": {
+            "res/scripts/gui/frame.py": "M"
+        }
     }
 }
