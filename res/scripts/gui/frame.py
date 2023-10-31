@@ -18,6 +18,7 @@ class WorkFrame(ttk.Frame):
 
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
+        self.reload_webhook = None
 
         self.__thread_manager = ThreadManager()
         self.add_threads()
@@ -32,8 +33,6 @@ class WorkFrame(ttk.Frame):
 
         self.__start_button = self.create_start_button()
         self.__start_button.pack()
-
-        self.reload_webhook = None
 
     # PROPERTIES
     @property
