@@ -49,7 +49,7 @@ class Logger:
 
 
 class MoveAverage:
-    def __init__(self, window: int):
+    def __init__(self, window: int, threshold: float):
         self.__window = window
         self.__queue = t_Queue(maxsize=0)
         self.__size = 0
@@ -58,12 +58,15 @@ class MoveAverage:
         self.__range = 1.0
         self.__min = 0.0
         self.__max = 0.0
+        self.__detect_threshold = threshold
 
     def enqueue(self, value: float):
         if self.__size >= self.__window:
             head = self.__queue.get()
             self.__sum -= head
             self.__size -= 1
+        elif self.__size == 0 and value > 1 / self.__detect_threshold:
+            value = 1 / self.__detect_threshold
 
         self.__queue.put(value)
         self.__size += 1
@@ -73,8 +76,8 @@ class MoveAverage:
         self.__min = min(self.__queue.queue)
         self.__range = self.__max - self.__min
 
-    def is_upper_deviation(self, value: float, threshold: float = 1.0):
-        return value > self.__average + self.__range * threshold
+    def is_upper_deviation(self, value: float):
+        return value > self.__average + self.__range * self.__detect_threshold
 
     @property
     def average(self):

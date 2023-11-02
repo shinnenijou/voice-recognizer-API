@@ -39,9 +39,8 @@ class VoiceDetector(Thread):
         self.__data_queue = t_Queue(maxsize=0)
         self.__state = self.State.Silent
 
-        self.__average_prob = utils.MoveAverage(config.get_int(STRING.CONFIG_AVERAGE_WINDOW))
-        self.__detect_threshold = 1 / config.get_float(STRING.CONFIG_DETECT_THRESHOLD)
-
+        self.__average_prob = utils.MoveAverage(config.get_int(STRING.CONFIG_AVERAGE_WINDOW),
+                                                1 / config.get_float(STRING.CONFIG_DETECT_THRESHOLD))
         self.__index = 0
         self.__running_flag = _running_flag
         self.__src_queue: t_Queue = kwargs.get('src_queue')
@@ -67,7 +66,7 @@ class VoiceDetector(Thread):
 
             # State machine
             if self.__state == self.State.Silent:
-                if self.__average_prob.is_upper_deviation(prob, self.__detect_threshold):
+                if self.__average_prob.is_upper_deviation(prob):
                     # 疑似发言, 加入数据队列并转变状态
                     self.__data_queue.put(data)
                     self.__state = self.State.Voice
@@ -80,7 +79,7 @@ class VoiceDetector(Thread):
 
                     self.__data_queue.put(data)
             else:
-                if self.__average_prob.is_upper_deviation(prob, self.__detect_threshold):
+                if self.__average_prob.is_upper_deviation(prob):
                     # 疑似发言, 加入数据队列, 状态不变
                     self.__data_queue.put(data)
                 else:
