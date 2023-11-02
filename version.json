@@ -23,5 +23,12 @@
         "update_files": {
             "res/scripts/gui/frame.py": "M"
         }
+    },
+    "0.2.6": {
+        "version": "0.2.6",
+        "update_files": {
+            "res/scripts/stream/predictor.py": "M",
+            "res/scripts/utils/__init__.py": "M"
+        }
     }
 }
