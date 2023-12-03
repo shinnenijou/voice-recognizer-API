@@ -59,6 +59,8 @@ class STRING:
     LABEL_DETECT_THRESHOLD = '認識感度'
     LABEL_AUTHOR = 'Shinnen'
     LABEL_TIMEOUT = '送信タイムアウト'
+    LABEL_AVERAGE_WINDOW = '発言確率記録長さ'
+    LABEL_CHUNK_NUM = '録音間隔'
 
     # TIPS
     TIP_DETECT_THRESHOLD = 'この数字は、大きいほど音声が認識されやすいが、\nノイズも拾われやすくなる。実際試しながら適切な数値に調整してください。'
@@ -91,12 +93,13 @@ class STRING:
     CONFIG_PROXY = 'proxy'
     CONFIG_TIMEOUT = 'timeout'
     CONFIG_APIKEY = 'api_key'
+    CONFIG_CHUNK_NUM = 'chunk_num'
 
     # Message TEXT
     START_RECOGNIZING = "┏━━━━━━━━━━━━━━━━━━━━━━━━┓\n" \
                       + "┃      音声認識が開始しました。   ┃\n" \
                       + "┗━━━━━━━━━━━━━━━━━━━━━━━━┛"
-    CONFIRM_SETTING_MODIFY = "変更した項目を保存しますか\n※一部の設定は再起動してから有効になります"
+    CONFIRM_SETTING_MODIFY = "変更した項目を保存しますか"
     APIKEY_ERROR = "[エラー]有効なAPIキーを入力してください"
 
     # OTHERS

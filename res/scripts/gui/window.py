@@ -78,7 +78,7 @@ def pop_setting_window(master):
     threshold_entry.configure(validatecommand=lambda: utils.is_unit_float(threshold_entry.get()))
     threshold_entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
     ToolTip(threshold_entry, STRING.TIP_DETECT_THRESHOLD, delay=0.5, follow=False)
-    proxy_entry_var.trace_add('write', lambda a, b, c: proxy_label_var.set(STRING.LABEL_DETECT_THRESHOLD+STRING.LABEL_MODIFY_MARK))
+    threshold_entry_var.trace_add('write', lambda a, b, c: threshold_label_var.set(STRING.LABEL_DETECT_THRESHOLD+STRING.LABEL_MODIFY_MARK))
 
     # TIMEOUT
     timeout_frame = ttk.Frame(setting_frame)
@@ -88,18 +88,42 @@ def pop_setting_window(master):
     ttk.Label(timeout_frame, textvariable=timeout_label_var, width=15).pack(side=LEFT, padx=(15, 0))
     timeout_entry = ttk.Entry(timeout_frame, textvariable=timeout_entry_var)
     timeout_entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
-    proxy_entry_var.trace_add('write', lambda a, b, c: proxy_label_var.set(STRING.LABEL_TIMEOUT+STRING.LABEL_MODIFY_MARK))
+    timeout_entry_var.trace_add('write', lambda a, b, c: timeout_label_var.set(STRING.LABEL_TIMEOUT+STRING.LABEL_MODIFY_MARK))
+
+    # average_window
+    average_window_frame = ttk.Frame(setting_frame)
+    average_window_frame.pack(side=TOP, fill=X, expand=YES, pady=(5, 2.5))
+    average_window_label_var = ttk.StringVar(average_window_frame, value=STRING.LABEL_AVERAGE_WINDOW)
+    average_window_entry_var = ttk.StringVar(average_window_frame, name=STRING.CONFIG_AVERAGE_WINDOW, value=config.get_value(STRING.CONFIG_AVERAGE_WINDOW))
+    ttk.Label(average_window_frame, textvariable=average_window_label_var, width=15).pack(side=LEFT, padx=(15, 0))
+    average_window_entry = ttk.Entry(average_window_frame, textvariable=average_window_entry_var)
+    average_window_entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
+    average_window_entry_var.trace_add('write', lambda a, b, c: average_window_label_var.set(STRING.LABEL_AVERAGE_WINDOW+STRING.LABEL_MODIFY_MARK))
+
+    # chunk_num
+    chunk_num_frame = ttk.Frame(setting_frame)
+    chunk_num_frame.pack(side=TOP, fill=X, expand=YES, pady=(5, 2.5))
+    chunk_num_label_var = ttk.StringVar(chunk_num_frame, value=STRING.LABEL_CHUNK_NUM)
+    chunk_num_entry_var = ttk.StringVar(chunk_num_frame, name=STRING.CONFIG_CHUNK_NUM, value=config.get_value(STRING.CONFIG_CHUNK_NUM))
+    ttk.Label(chunk_num_frame, textvariable=chunk_num_label_var, width=15).pack(side=LEFT, padx=(15, 0))
+    chunk_num_entry = ttk.Entry(chunk_num_frame, textvariable=chunk_num_entry_var)
+    chunk_num_entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
+    chunk_num_entry_var.trace_add('write', lambda a, b, c: chunk_num_label_var.set(STRING.LABEL_CHUNK_NUM+STRING.LABEL_MODIFY_MARK))
 
     # setting dict
     settings = {
         STRING.CONFIG_PROXY: proxy_entry_var,
         STRING.CONFIG_DETECT_THRESHOLD: threshold_entry_var,
         STRING.CONFIG_TIMEOUT: timeout_entry_var,
+        STRING.CONFIG_AVERAGE_WINDOW: average_window_entry_var,
+        STRING.CONFIG_CHUNK_NUM: chunk_num_entry_var,
     }
     labels = {
         STRING.CONFIG_PROXY: proxy_label_var,
         STRING.CONFIG_DETECT_THRESHOLD: threshold_label_var,
         STRING.CONFIG_TIMEOUT: timeout_label_var,
+        STRING.CONFIG_AVERAGE_WINDOW: average_window_label_var,
+        STRING.CONFIG_CHUNK_NUM: chunk_num_label_var
     }
 
     # Confirm BUTTON

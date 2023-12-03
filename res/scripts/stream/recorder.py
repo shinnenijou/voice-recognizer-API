@@ -2,7 +2,7 @@ from threading import Thread, Event
 
 import pyaudio
 
-from res.scripts.config import CONST, STRING
+from res.scripts.config import CONST, STRING, config
 
 
 class MicrophoneRecorder(Thread):
@@ -24,11 +24,11 @@ class MicrophoneRecorder(Thread):
         self.__dst_queue = kwargs.get('dst_queue')
 
     def run(self):
-        wave_data = b''
+        chunk_num = config.get_int(STRING.CONFIG_CHUNK_NUM)
         print(STRING.START_RECOGNIZING)
         while self.__running_flag.is_set():
             # record from microphone
-            data = self.__stream.read(CONST.CHUNK_SIZE * 10) # about 0.3s
+            data = self.__stream.read(CONST.CHUNK_SIZE * chunk_num)
             self.__dst_queue.put(data)
 
         self.__stream.stop_stream()
