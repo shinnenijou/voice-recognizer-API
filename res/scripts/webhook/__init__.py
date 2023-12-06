@@ -4,7 +4,7 @@ from threading import Thread, Event
 from multiprocessing import Queue as p_Queue
 
 from res.scripts.config import config, STRING, CONST
-from res.scripts.utils import logger
+from res.scripts.utils import logger, textFilter
 
 PROXIES = {}
 if config.get_value(STRING.CONFIG_PROXY):
@@ -58,6 +58,9 @@ class WebhookSender(Thread):
                 continue
 
             msg = '\n'.join(texts)
+
+            if not textFilter.is_legal(msg):
+                continue
 
             self.send(url, name, msg)
 

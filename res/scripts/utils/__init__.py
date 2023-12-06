@@ -185,4 +185,22 @@ def is_unit_float(string: str):
         return False
 
 
+class TextFilter:
+
+    def __init__(self):
+        self.__ng_words = {}
+        if os.path.isfile(os.path.join(myPath.RES_PATH, 'static', 'ng_words.json')):
+            import json
+            with open(os.path.join(myPath.RES_PATH, 'static', 'ng_words.json'), 'r') as file:
+                self.__ng_words = json.loads(file.read())
+
+    def is_legal(self, string: str):
+        for key in self.__ng_words.keys():
+            if string.find(key) != -1:
+                return False
+
+        return True
+
+
 logger = Logger()
+textFilter = TextFilter()
