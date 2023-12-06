@@ -4,6 +4,7 @@ import openai
 import requests
 from res.scripts.config import config
 from res.scripts.config.const import STRING, CONST
+from res.scripts.utils import textFilter
 
 class WhisperRecognizer(Thread):
     def __init__(self, _running_flag: Event, **kwargs):
@@ -45,5 +46,9 @@ class WhisperRecognizer(Thread):
 
             file, language = self.__src_queue.get()
             text = self.transcribe(file, language)
+
+            if not textFilter.is_legal(text):
+                continue
+
             print(text)
             self.__dst_queue.put(text)

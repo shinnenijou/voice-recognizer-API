@@ -76,6 +76,8 @@ class MoveAverage:
         self.__min = min(self.__queue.queue)
         self.__range = self.__max - self.__min
 
+        print(f"value: {value}, average: {self.__average}")
+
     def is_upper_deviation(self, value: float):
         return value > self.__average + self.__range * self.__detect_threshold
 
@@ -191,7 +193,7 @@ class TextFilter:
         self.__ng_words = {}
         if os.path.isfile(os.path.join(myPath.RES_PATH, 'static', 'ng_words.json')):
             import json
-            with open(os.path.join(myPath.RES_PATH, 'static', 'ng_words.json'), 'r') as file:
+            with open(os.path.join(myPath.RES_PATH, 'static', 'ng_words.json'), 'r', encoding='utf-8') as file:
                 self.__ng_words = json.loads(file.read())
 
     def is_legal(self, string: str):
