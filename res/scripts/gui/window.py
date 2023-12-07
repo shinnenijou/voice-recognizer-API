@@ -68,6 +68,16 @@ def pop_setting_window(master):
 
     proxy_entry_var.trace_add('write', lambda a, b, c: proxy_label_var.set(STRING.LABEL_PROXY+STRING.LABEL_MODIFY_MARK))
 
+    # TIMEOUT
+    timeout_frame = ttk.Frame(setting_frame)
+    timeout_frame.pack(side=TOP, fill=X, expand=YES, pady=(5, 2.5))
+    timeout_label_var = ttk.StringVar(timeout_frame, value=STRING.LABEL_TIMEOUT)
+    timeout_entry_var = ttk.StringVar(timeout_frame, name=STRING.CONFIG_TIMEOUT, value=config.get_value(STRING.CONFIG_TIMEOUT))
+    ttk.Label(timeout_frame, textvariable=timeout_label_var, width=15).pack(side=LEFT, padx=(15, 0))
+    timeout_entry = ttk.Entry(timeout_frame, textvariable=timeout_entry_var)
+    timeout_entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
+    timeout_entry_var.trace_add('write', lambda a, b, c: timeout_label_var.set(STRING.LABEL_TIMEOUT+STRING.LABEL_MODIFY_MARK))
+
     # DETECT THRESHOLD
     threshold_frame = ttk.Frame(setting_frame)
     threshold_frame.pack(side=TOP, fill=X, expand=YES, pady=(5, 2.5))
@@ -79,16 +89,6 @@ def pop_setting_window(master):
     threshold_entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
     ToolTip(threshold_entry, STRING.TIP_DETECT_THRESHOLD, delay=0.5, follow=False)
     threshold_entry_var.trace_add('write', lambda a, b, c: threshold_label_var.set(STRING.LABEL_DETECT_THRESHOLD+STRING.LABEL_MODIFY_MARK))
-
-    # TIMEOUT
-    timeout_frame = ttk.Frame(setting_frame)
-    timeout_frame.pack(side=TOP, fill=X, expand=YES, pady=(5, 2.5))
-    timeout_label_var = ttk.StringVar(timeout_frame, value=STRING.LABEL_TIMEOUT)
-    timeout_entry_var = ttk.StringVar(timeout_frame, name=STRING.CONFIG_TIMEOUT, value=config.get_value(STRING.CONFIG_TIMEOUT))
-    ttk.Label(timeout_frame, textvariable=timeout_label_var, width=15).pack(side=LEFT, padx=(15, 0))
-    timeout_entry = ttk.Entry(timeout_frame, textvariable=timeout_entry_var)
-    timeout_entry.pack(side=LEFT, fill=X, expand=YES, padx=5)
-    timeout_entry_var.trace_add('write', lambda a, b, c: timeout_label_var.set(STRING.LABEL_TIMEOUT+STRING.LABEL_MODIFY_MARK))
 
     # average_window
     average_window_frame = ttk.Frame(setting_frame)
