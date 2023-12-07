@@ -39,5 +39,15 @@
             "res/scripts/gui/window.py": "M",
             "res/scripts/stream/recorder.py": "M"
         }
+    },
+    "0.2.8": {
+        "version": "0.2.8",
+        "update_files": {
+            "res/scripts/utils/__init__.py": "M",
+            "res/scripts/webhook/__init__.py": "M",
+            "res/static/ng_words.json": "M",
+            "res/scripts/recognize/__init__.py": "M",
+            "res/scripts/stream/predictor.py": "M"
+        }
     }
 }
