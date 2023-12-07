@@ -58,15 +58,20 @@ class MoveAverage:
         self.__range = 1.0
         self.__min = 0.0
         self.__max = 0.0
-        self.__detect_threshold = threshold
+        self.__detect_sensitivity = threshold
+
+        if self.__detect_sensitivity > 1:
+            self.__detect_sensitivity = 1
+        elif self.__detect_sensitivity < 0:
+            self.__detect_sensitivity = 0
 
     def enqueue(self, value: float):
         if self.__size >= self.__window:
             head = self.__queue.get()
             self.__sum -= head
             self.__size -= 1
-        elif self.__size == 0 and value > 1 / self.__detect_threshold:
-            value = 1 / self.__detect_threshold
+        elif self.__size == 0 and value > self.get_threshold():
+            value = self.get_threshold()
 
         self.__queue.put(value)
         self.__size += 1
@@ -76,10 +81,11 @@ class MoveAverage:
         self.__min = min(self.__queue.queue)
         self.__range = self.__max - self.__min
 
-        print(f"value: {value}, average: {self.__average}")
-
     def is_upper_deviation(self, value: float):
-        return value > self.__average + self.__range * self.__detect_threshold
+        return value > self.get_threshold()
+
+    def get_threshold(self):
+        return self.__average + (1 - self.__average) * (1 - self.__detect_sensitivity)
 
     @property
     def average(self):

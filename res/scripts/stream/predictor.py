@@ -40,7 +40,7 @@ class VoiceDetector(Thread):
         self.__state = self.State.Silent
 
         self.__average_prob = utils.MoveAverage(config.get_int(STRING.CONFIG_AVERAGE_WINDOW),
-                                                1 / config.get_float(STRING.CONFIG_DETECT_THRESHOLD))
+                                                config.get_float(STRING.CONFIG_DETECT_THRESHOLD))
         self.__index = 0
         self.__running_flag = _running_flag
         self.__src_queue: t_Queue = kwargs.get('src_queue')
