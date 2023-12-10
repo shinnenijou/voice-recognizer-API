@@ -1,18 +1,23 @@
 from threading import Thread, Event
 import gc
-from res.scripts.config import EResult, ErrorString
+from res.scripts.config import EResult, ErrorString, CONST
 from res.scripts.utils import logger
 
 
 class ThreadManager:
 
     def __init__(self):
+        self.__timer = 0
+
         self.__running_flag = Event()
+        self.__events = {}
         self.__tasks = []
         self.__templates = {}
         self.__threads = {}
         self.__args = {}
         self.__queue_ref = []
+
+        self.__restart_threads = []
 
     def is_running(self):
         return self.__running_flag.is_set()
@@ -28,6 +33,7 @@ class ThreadManager:
             return False
 
         self.__tasks.append(name)
+        self.__events[name] = Event()
         self.__args[name] = kwargs
         self.__templates[name] = template
 
@@ -50,6 +56,10 @@ class ThreadManager:
 
         return True
 
+    def register_restart(self, thread_template):
+        if thread_template not in self.__restart_threads:
+            self.__restart_threads.append(thread_template)
+
     def start(self):
         if self.__running_flag.is_set():
             return False
@@ -59,7 +69,7 @@ class ThreadManager:
                 queue.get()
 
         for thread_name in self.__tasks:
-            self.__threads[thread_name] = self.__templates[thread_name](self.__running_flag, **self.__args[thread_name])
+            self.__threads[thread_name] = self.__templates[thread_name](self.__events[thread_name], **self.__args[thread_name])
 
             result = EResult.Success
             if hasattr(self.__threads[thread_name], 'init'):
@@ -74,6 +84,7 @@ class ThreadManager:
         self.__running_flag.set()
 
         for thread_name in self.__tasks:
+            self.__events[thread_name].set()
             self.__threads[thread_name].start()
 
         return True
@@ -86,6 +97,7 @@ class ThreadManager:
 
         for thread_name in self.__tasks:
             if thread_name in self.__threads:
+                self.__events[thread_name].clear()
                 self.__threads[thread_name].join()
                 del self.__threads[thread_name]
 
@@ -94,6 +106,35 @@ class ThreadManager:
                 queue.get()
 
         return True
+
+    def update(self, ms_elapse):
+        self.__timer += ms_elapse
+
+        if self.__timer < CONST.RESTART_INTERVAL:
+            return
+
+        self.__timer = 0
+
+        if not self.__running_flag.is_set():
+            return False
+
+        for template in self.__restart_threads:
+            for thread_name in self.__threads:
+                if not isinstance(self.__threads[thread_name], template):
+                    continue
+
+                # stop thread
+                self.__events[thread_name].clear()
+                self.__threads[thread_name].join()
+
+                # start new thread
+                self.__threads[thread_name] = self.__templates[thread_name](self.__events[thread_name], **self.__args[thread_name])
+
+                if hasattr(self.__threads[thread_name], 'init'):
+                    self.__threads[thread_name].init()
+
+                self.__events[thread_name].set()
+                self.__threads[thread_name].start()
 
     def __clear(self):
         for thread_name in self.__tasks:

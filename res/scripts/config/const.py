@@ -22,6 +22,9 @@ class CONST:
     CHUNK_SIZE = 512
     FORMAT = pyaudio.paInt16
 
+    # THREADS
+    RESTART_INTERVAL = 180000
+
 
 class STRING:
     # LABEL TEXT

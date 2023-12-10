@@ -1,5 +1,5 @@
 import tkinter as tk
-import os
+import time
 from queue import Queue as t_Queue
 
 import ttkbootstrap as ttk
@@ -33,6 +33,9 @@ class WorkFrame(ttk.Frame):
 
         self.__start_button = self.create_start_button()
         self.__start_button.pack()
+
+        self.__time = int(time.time() * 1000)
+        self.after(config.get_int(STRING.CONFIG_UPDATE_INTERVAL), self.update)
 
     # PROPERTIES
     @property
@@ -104,6 +107,8 @@ class WorkFrame(ttk.Frame):
             dst_queue=voice_queue
         )
 
+        self.__thread_manager.register_restart(VoiceDetector)
+
         from res.scripts.webhook import WebhookSender
         self.__thread_manager.add(
             WebhookSender,
@@ -166,6 +171,15 @@ class WorkFrame(ttk.Frame):
             width=10,
             takefocus=False
         )
+
+    def update(self):
+        ms_time = int(time.time() * 1000)
+        ms_elapse = ms_time - self.__time
+        self.__time = ms_time
+
+        self.__thread_manager.update(ms_elapse)
+
+        self.after(config.get_int(STRING.CONFIG_UPDATE_INTERVAL), self.update)
 
 
 class SettingFrame(ttk.Labelframe):
