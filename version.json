@@ -49,5 +49,14 @@
             "res/scripts/recognize/__init__.py": "M",
             "res/scripts/stream/predictor.py": "M"
         }
+    },
+    "0.3.0": {
+        "version": "0.3.0",
+        "update_files": {
+            "res/scripts/gui/window.py": "M",
+            "res/scripts/config/const.py": "M",
+            "res/scripts/gui/frame.py": "M",
+            "res/scripts/managers/thread_manager.py": "M"
+        }
     }
 }
