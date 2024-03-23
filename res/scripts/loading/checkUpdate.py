@@ -133,21 +133,13 @@ except ModuleNotFoundError:
     return file
 
 
-def is_module_available(module_name: str):
-    file = make_temp_py(module_name)
-    subp = subprocess.run(f'{myPath.PYTHON_PATH} -s {file}', shell=True)
-    os.remove(file)
-
-    return subp.returncode == 0
-
-
 def update_dependency(module, version=''):
     subp = None
-    if not is_module_available(module):
-        if version == '':
-            subp = subprocess.run(f"{myPath.PYTHON_PATH} -s -m pip install {module}", shell=True)
-        else:
-            subp = subprocess.run(f"{myPath.PYTHON_PATH} -s -m pip install {module}=={version}", shell=True)
+
+    if version == '':
+        subp = subprocess.run(f"{myPath.PYTHON_PATH} -s -m pip install {module} --upgrade", shell=True)
+    else:
+        subp = subprocess.run(f"{myPath.PYTHON_PATH} -s -m pip install {module}=={version}", shell=True)
 
     return subp.returncode == 0
 
