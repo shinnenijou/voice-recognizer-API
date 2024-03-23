@@ -13,6 +13,7 @@ class CONST:
     LOADING_FRAMERATE = 15
 
     # RECOGNIZER
+    WHISPER_RPM = 3
     MODEL_LIST = ('tiny', 'small', 'base', 'medium', 'large', 'large-v2')
     DEVICE_LIST = ('cuda', 'cpu', 'auto')
 
