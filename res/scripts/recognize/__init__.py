@@ -4,7 +4,8 @@ import openai
 import requests
 from res.scripts.config import config
 from res.scripts.config.const import STRING, CONST
-from res.scripts.utils import textFilter
+from res.scripts.utils import textFilter, logger
+import traceback
 
 
 class WhisperRecognizer(Thread):
@@ -23,9 +24,12 @@ class WhisperRecognizer(Thread):
                 model="whisper-1",
                 language=_language,
             )
-            return transcript.get('text', '')
+            return transcript.text
         except openai.AuthenticationError:
             print(STRING.APIKEY_ERROR)
+        except Exception as e:
+            logger.log_error(e)
+            logger.log_error(traceback.format_exc())
             return ''
 
     @staticmethod
