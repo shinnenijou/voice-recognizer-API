@@ -24,6 +24,10 @@ class WhisperRecognizer(Thread):
                 model="whisper-1",
                 language=_language,
             )
+
+            if transcript.text is None:
+                raise Exception("No transcription")
+
             return transcript.text
         except openai.AuthenticationError:
             print(STRING.APIKEY_ERROR)
