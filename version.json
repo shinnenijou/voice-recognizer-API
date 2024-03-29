@@ -82,5 +82,14 @@
             "res/scripts/stream/recorder.py": "M",
             "res/static/ng_words.json": "M"
         }
+    },
+    "0.4.2": {
+        "version": "0.4.2",
+        "update_files": {
+            "res/scripts/gui/frame.py": "M",
+            "res/scripts/config/__init__.py": "M",
+            "res/scripts/config/config.py": "M",
+            "res/scripts/gui/window.py": "M"
+        }
     }
 }
