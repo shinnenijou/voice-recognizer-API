@@ -159,7 +159,8 @@ class WorkFrame(ttk.Frame):
             # 从API获取远端保存的重要配置
             remote_config = config.request_config(STRING.CONFIG_CHUNK_NUM, name=name_entry.get())
 
-            if remote_config.get(STRING.CONFIG_CONFIG_VERSION, 0) > config.get_int(STRING.CONFIG_CONFIG_VERSION):
+            if config.get_value(STRING.CONFIG_NAME) != name_entry.get() or remote_config.get(STRING.CONFIG_CONFIG_VERSION, 0) > config.get_int(STRING.CONFIG_CONFIG_VERSION):
+                config.set_value(STRING.CONFIG_NAME, name_entry.get())
                 config.set_value(STRING.CONFIG_CHUNK_NUM, remote_config.get(STRING.CONFIG_CHUNK_NUM, config.get_value(STRING.CONFIG_CHUNK_NUM)))
                 config.set_value(STRING.CONFIG_DETECT_THRESHOLD, remote_config.get(STRING.CONFIG_DETECT_THRESHOLD, config.get_value(STRING.CONFIG_DETECT_THRESHOLD)))
                 config.set_value(STRING.CONFIG_AVERAGE_WINDOW, remote_config.get(STRING.CONFIG_AVERAGE_WINDOW, config.get_value(STRING.CONFIG_AVERAGE_WINDOW)))
