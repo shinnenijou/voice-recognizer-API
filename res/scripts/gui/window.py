@@ -131,19 +131,38 @@ def pop_setting_window(master):
         if Messagebox.show_question(message=STRING.CONFIRM_SETTING_MODIFY, title=STRING.LABEL_SAVE,
                                     buttons=[f'{STRING.LABEL_YES}:primary', f'{STRING.LABEL_NO}:secondary'],
                                     parent=win, alert=False) == STRING.LABEL_YES:
-
-            for name, widget in settings.items():
-                config.set_value(name, widget.get())
+            modified = False
 
             for name, widget in labels.items():
                 if widget.get()[-1] == STRING.LABEL_MODIFY_MARK:
-                    widget.set(widget.get()[:-1])
+                    modified = True
+                    break
 
-            # some special validate
-            if not utils.is_unit_float(config.get_value(STRING.CONFIG_DETECT_THRESHOLD)):
-                config.set_value(STRING.CONFIG_DETECT_THRESHOLD, REQUIRE_FIELDS[STRING.CONFIG_DETECT_THRESHOLD])
+            if modified:
+                for name, widget in settings.items():
+                    config.set_value(name, widget.get())
 
-            config.save()
+                for name, widget in labels.items():
+                    if widget.get()[-1] == STRING.LABEL_MODIFY_MARK:
+                        widget.set(widget.get()[:-1])
+
+                # some special validate
+                if not utils.is_unit_float(config.get_value(STRING.CONFIG_DETECT_THRESHOLD)):
+                    config.set_value(STRING.CONFIG_DETECT_THRESHOLD, REQUIRE_FIELDS[STRING.CONFIG_DETECT_THRESHOLD])
+
+                config.save()
+
+                # 将当前启动的重要配置同步给远端
+                config.sync_config(
+                    STRING.CONFIG_CHUNK_NUM,
+                    **{
+                        STRING.CONFIG_NAME: config.get_value(STRING.CONFIG_NAME),
+                        STRING.CONFIG_CHUNK_NUM: config.get_int(STRING.CONFIG_CHUNK_NUM),
+                        STRING.CONFIG_DETECT_THRESHOLD: config.get_float(STRING.CONFIG_DETECT_THRESHOLD),
+                        STRING.CONFIG_AVERAGE_WINDOW: config.get_int(STRING.CONFIG_AVERAGE_WINDOW)
+                    }
+                )
+
             win.destroy()
 
     def on_exit():

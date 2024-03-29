@@ -39,12 +39,13 @@ class WhisperRecognizer(Thread):
     @staticmethod
     def fetch_key(name: str):
         try:
-            resp = requests.get(f"{STRING.BASE_API_URL}/openai_key", params={"name": name})
+            resp = requests.get(f"{STRING.BASE_API_URL}/openai_key/", params={"name": name})
             data = resp.json()
             if data.get('code', -2) == 0:
                 return data.get('data', '')
             else:
                 print("[error]" + data.get('message', 'Unknown error'))
+                print("[error]有効な名前を入力してください。")
                 return ''
         except Exception as e:
             print("[error]" + str(e))
@@ -65,7 +66,7 @@ class WhisperRecognizer(Thread):
         last_request_time = 0
 
         while self.__running_flag.is_set():
-            if self.__src_queue.empty():
+            if self.__src_queue.empty() or not api_key:
                 time.sleep(config.get_int(STRING.CONFIG_UPDATE_INTERVAL) / 1000)
                 continue
 

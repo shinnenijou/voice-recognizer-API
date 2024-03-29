@@ -85,6 +85,7 @@ class STRING:
     MENU_OPTIONAL = 'オプション'
 
     # CONFIG FIELDS
+    CONFIG_CONFIG_VERSION = 'config_version'
     CONFIG_VERSION = 'version'
     CONFIG_LANGUAGE = 'language'
     CONFIG_MODEL = 'model'

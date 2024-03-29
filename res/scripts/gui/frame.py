@@ -151,11 +151,22 @@ class WorkFrame(ttk.Frame):
                 button.invoke()
 
         # 注册需要的闭包
-        def reload_webhook():
+        def reload_config():
+            # 从API获取配置好的webhook_url
             url_combobox.data = config.request_config(STRING.CONFIG_WEBHOOK, name=name_entry.get())
             url_combobox.refresh()
 
-        self.reload_webhook = reload_webhook
+            # 从API获取远端保存的重要配置
+            remote_config = config.request_config(STRING.CONFIG_CHUNK_NUM, name=name_entry.get())
+
+            if remote_config.get(STRING.CONFIG_CONFIG_VERSION, 0) > config.get_int(STRING.CONFIG_CONFIG_VERSION):
+                config.set_value(STRING.CONFIG_CHUNK_NUM, remote_config.get(STRING.CONFIG_CHUNK_NUM, config.get_value(STRING.CONFIG_CHUNK_NUM)))
+                config.set_value(STRING.CONFIG_DETECT_THRESHOLD, remote_config.get(STRING.CONFIG_DETECT_THRESHOLD, config.get_value(STRING.CONFIG_DETECT_THRESHOLD)))
+                config.set_value(STRING.CONFIG_AVERAGE_WINDOW, remote_config.get(STRING.CONFIG_AVERAGE_WINDOW, config.get_value(STRING.CONFIG_AVERAGE_WINDOW)))
+
+                config.save(remote_config.get(STRING.CONFIG_CONFIG_VERSION, 0))
+
+        self.reload_webhook = reload_config
         self.reload_webhook()
         reload_button.config(command=self.reload_webhook)
 

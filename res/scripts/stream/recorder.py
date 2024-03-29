@@ -28,6 +28,7 @@ class MicrophoneRecorder(Thread):
         print(STRING.START_RECOGNIZING)
         while self.__running_flag.is_set():
             # record from microphone
+            # about 0.03s for one chunk
             data = self.__stream.read(CONST.CHUNK_SIZE * chunk_num)
             self.__dst_queue.put(data)
 
