@@ -6,7 +6,7 @@ import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
 import myPath
-from res.scripts.config import CONST, is_gui_only, config, STRING
+from res.scripts.config import CONST, is_gui_only, config, STRING, REMOTE_FIELDS
 from res.scripts.managers import ThreadManager
 from res.scripts.utils import logger
 
@@ -161,11 +161,12 @@ class WorkFrame(ttk.Frame):
 
             if config.get_value(STRING.CONFIG_NAME) != name_entry.get() or remote_config.get(STRING.CONFIG_CONFIG_VERSION, 0) > config.get_int(STRING.CONFIG_CONFIG_VERSION):
                 config.set_value(STRING.CONFIG_NAME, name_entry.get())
-                config.set_value(STRING.CONFIG_CHUNK_NUM, remote_config.get(STRING.CONFIG_CHUNK_NUM, config.get_value(STRING.CONFIG_CHUNK_NUM)))
-                config.set_value(STRING.CONFIG_DETECT_THRESHOLD, remote_config.get(STRING.CONFIG_DETECT_THRESHOLD, config.get_value(STRING.CONFIG_DETECT_THRESHOLD)))
-                config.set_value(STRING.CONFIG_AVERAGE_WINDOW, remote_config.get(STRING.CONFIG_AVERAGE_WINDOW, config.get_value(STRING.CONFIG_AVERAGE_WINDOW)))
 
-                config.save(remote_config.get(STRING.CONFIG_CONFIG_VERSION, 0))
+                for key in REMOTE_FIELDS.keys():
+                    config.set_value(key, remote_config.get(key, config.get_value(key)))
+
+                config.set_value(STRING.CONFIG_CONFIG_VERSION, remote_config.get(STRING.CONFIG_CONFIG_VERSION, 0))
+                config.save()
 
         self.reload_webhook = reload_config
         self.reload_webhook()

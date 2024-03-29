@@ -5,7 +5,7 @@ from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
 from tktooltip import ToolTip
 
-from res.scripts.config import CONST, config, STRING, REQUIRE_FIELDS
+from res.scripts.config import CONST, config, STRING, REQUIRE_FIELDS, REMOTE_FIELDS
 import res.scripts.utils as utils
 import myPath
 
@@ -155,11 +155,9 @@ def pop_setting_window(master):
                 # 将当前启动的重要配置同步给远端
                 config.sync_config(
                     STRING.CONFIG_CHUNK_NUM,
+                    **{STRING.CONFIG_NAME: config.get_value(STRING.CONFIG_NAME)},
                     **{
-                        STRING.CONFIG_NAME: config.get_value(STRING.CONFIG_NAME),
-                        STRING.CONFIG_CHUNK_NUM: config.get_int(STRING.CONFIG_CHUNK_NUM),
-                        STRING.CONFIG_DETECT_THRESHOLD: config.get_float(STRING.CONFIG_DETECT_THRESHOLD),
-                        STRING.CONFIG_AVERAGE_WINDOW: config.get_int(STRING.CONFIG_AVERAGE_WINDOW)
+                        key: config.get_value(key) for key in REMOTE_FIELDS.keys()
                     }
                 )
 

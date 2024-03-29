@@ -66,9 +66,6 @@ class Config(RawConfigParser):
             self.set_value(STRING.CONFIG_CONFIG_VERSION, self.get_int(STRING.CONFIG_CONFIG_VERSION) + 1)
 
     def save(self, config_version=None):
-        if config_version is not None:
-            self.set_value(STRING.CONFIG_CONFIG_VERSION, config_version)
-
         with open(self.__config_file, 'w', encoding='UTF-8') as f:
             self.write(f)
 
